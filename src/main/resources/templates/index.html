@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><title>ЧГК голосовалки</title></head>
+<body>
+<h1>Вставь анонсы</h1>
+<form action="/parse" method="post">
+    <label>
+        <textarea name="rawText" rows="20" cols="80"
+                  placeholder="Вставить тоьлко один анонс на один день в одном МПИ"></textarea>
+    </label><br/>
+    <button type="submit">Распарсить</button>
+</form>
+</body>
+</html>
