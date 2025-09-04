@@ -20,7 +20,7 @@ public class FxController {
     private final TelegramService telegramService;
 
     // Связываем элементы из FXML с полями в классе
-    @FXML private TextArea initialParseTextArea;
+    @FXML private TextArea parseTextArea;
     @FXML private TextArea moreParseTextArea;
     @FXML private VBox gamesContainer;
 
@@ -31,19 +31,19 @@ public class FxController {
 
     // Метод для кнопки "Распарсить и отобразить"
     @FXML
-    private void parseInitial() {
-        List<GameDto> games = parser.parseGames(initialParseTextArea.getText());
+    private void parseAndDisplay() {
+        List<GameDto> games = parser.parseGames(parseTextArea.getText());
         gamesContainer.getChildren().clear(); // Очищаем старый список
         games.forEach(this::addGameRow);
-        initialParseTextArea.clear();
+        parseTextArea.clear();
     }
 
     // Метод для кнопки "Распарсить и добавить"
     @FXML
-    private void parseMore() {
-        List<GameDto> games = parser.parseGames(moreParseTextArea.getText());
+    private void addMoreAnnouncements() {
+        List<GameDto> games = parser.parseGames(parseTextArea.getText());
         games.forEach(this::addGameRow);
-        moreParseTextArea.clear();
+        parseTextArea.clear();
     }
 
     // Метод для кнопки "+ Добавить пустой турнир"

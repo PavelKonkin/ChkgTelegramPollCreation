@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
@@ -10,8 +9,11 @@
     <top>
         <VBox spacing="10" style="-fx-padding: 10;">
             <Label text="Вставьте анонс для парсинга:"/>
-            <TextArea fx:id="initialParseTextArea" prefRowCount="8"/>
-            <Button text="Распарсить и отобразить" onAction="#parseInitial"/>
+            <TextArea fx:id="parseTextArea" prefRowCount="8"/>
+            <HBox spacing="10">
+                <Button text="Распарсить и отобразить" onAction="#parseAndDisplay"/>
+                <Button text="Распарсить и добавить к списку" onAction="#addMoreAnnouncements"/>
+            </HBox>
         </VBox>
     </top>
 
@@ -25,10 +27,6 @@
         <VBox spacing="10" style="-fx-padding: 10;">
             <Separator/>
             <Button text="+ Добавить пустой турнир" onAction="#addEmptyGame"/>
-            <Separator/>
-            <Label text="Вставьте ещё один анонс, чтобы добавить к списку:"/>
-            <TextArea fx:id="moreParseTextArea" prefRowCount="4"/>
-            <Button text="Распарсить и добавить" onAction="#parseMore"/>
             <Separator/>
             <Button text="Сформировать и отправить голосование" onAction="#sendPoll"
                     style="-fx-font-weight: bold;"/>

@@ -1,4 +1,4 @@
-package org.chgk.config;
+package org.chgk.desktopconfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -6,7 +6,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class WebAppConfig {
+public class DesktopAppConfig {
 
     @Bean
     public RestTemplate restTemplate() {
