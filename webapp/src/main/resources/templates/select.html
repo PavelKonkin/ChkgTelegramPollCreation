@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <title>Выбор турниров</title>
+    <style>
+        .game-row { margin-bottom: 10px; }
+        .move-btn, .remove-btn { margin-left: 5px; }
+        textarea { width: 100%; }
+    </style>
+</head>
+<body>
+<h1>Выбери турниры для голосования</h1>
+
+<form id="gamesForm" th:object="${gameWrapper}" method="post">
+    <!-- Вставка ЕЩЁ ОДНОГО анонса (в той же форме!) -->
+    <label>
+        <textarea name="rawText" rows="6"
+                  placeholder="Вставь ещё один анонс (парсится и ДОБАВЛЯЕТСЯ к текущему списку)"></textarea>
+    </label><br/>
+    <button type="submit" formaction="/parseMore">Распарсить и добавить</button>
+
+    <hr/>
+
+    <!-- Список турниров -->
+    <div id="gamesContainer">
+        <div th:each="game, iter : *{games}" class="game-row">
+            <input type="checkbox" th:field="*{games[__${iter.index}__].selected}"/>
+            <input type="text" th:field="*{games[__${iter.index}__].date}"  size="12" placeholder="дата"/>
+            <input type="text" th:field="*{games[__${iter.index}__].time}"  size="6"  placeholder="время"/>
+            <input type="text" th:field="*{games[__${iter.index}__].place}" size="25" placeholder="место"/>
+            <input type="text" th:field="*{games[__${iter.index}__].name}"  size="60" placeholder="название"/>
+
+            <button type="button" class="move-btn"   onclick="moveUp(this)">↑</button>
+            <button type="button" class="move-btn"   onclick="moveDown(this)">↓</button>
+            <button type="button" class="remove-btn" onclick="removeGame(this)">✕</button>
+        </div>
+    </div>
+
+    <button type="button" onclick="addGame()">+ Добавить турнир</button>
+    <br/><br/>
+
+    <!-- Отправка голосования (из этой же формы) -->
+    <button type="submit" formaction="/sendPoll">Сформировать голосование</button>
+</form>
+
+<script>
+    function moveUp(btn) {
+        const row = btn.closest('.game-row');
+        const prev = row.previousElementSibling;
+        if (prev) row.parentNode.insertBefore(row, prev);
+        reindexGames();
+    }
+
+    function moveDown(btn) {
+        const row = btn.closest('.game-row');
+        const next = row.nextElementSibling;
+        if (next) row.parentNode.insertBefore(next, row);
+        reindexGames();
+    }
+
+    function removeGame(btn) {
+        const row = btn.closest('.game-row');
+        row.remove();
+        reindexGames();
+    }
+
+    function addGame() {
+        const container = document.getElementById("gamesContainer");
+        // создаём строку руками, сразу с правильными name/id (потом переиндексируем)
+        const newRow = document.createElement("div");
+        newRow.className = "game-row";
+        newRow.innerHTML = `
+            <input type="checkbox" name="games[0].selected" id="games0.selected" checked/>
+            <input type="text" name="games[0].date"    id="games0.date"    size="12" placeholder="дата"/>
+            <input type="text" name="games[0].time"    id="games0.time"    size="6"  placeholder="время"/>
+            <input type="text" name="games[0].place"   id="games0.place"   size="25" placeholder="место"/>
+            <input type="text" name="games[0].name"    id="games0.name"    size="60" placeholder="название"/>
+            <button type="button" class="move-btn"   onclick="moveUp(this)">↑</button>
+            <button type="button" class="move-btn"   onclick="moveDown(this)">↓</button>
+            <button type="button" class="remove-btn" onclick="removeGame(this)">✕</button>
+        `;
+        container.appendChild(newRow);
+        reindexGames();
+    }
+
+    function reindexGames() {
+        const rows = document.querySelectorAll("#gamesContainer .game-row");
+        rows.forEach((row, idx) => {
+            row.querySelectorAll("input").forEach(inp => {
+                // base = selected|date|time|place|name
+                const m = inp.name.match(/games\[\d+]\.(.+)$/);
+                const base = m ? m[1] : (inp.name || "").split('.').pop();
+                if (base) {
+                    inp.name = `games[${idx}].${base}`;
+                    inp.id   = `games${idx}.${base}`;
+                }
+            });
+        });
+    }
+</script>
+</body>
+</html>

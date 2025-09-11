@@ -1,0 +1,3 @@
+telegram:
+  bot-token: "8136822136:AAHZDVWrD3fohV-Ux8n3APPDT_ipCf80sz8"
+  chat-id: "-1002570382755" # чат или канал, куда бот будет слать голосование

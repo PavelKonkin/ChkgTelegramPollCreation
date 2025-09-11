@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.chgk.controller.FxController">
+
+    <top>
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <Label text="Вставьте анонс для парсинга:"/>
+            <TextArea fx:id="parseTextArea" prefRowCount="8"/>
+            <HBox spacing="10">
+                <Button text="Распарсить и отобразить" onAction="#parseAndDisplay"/>
+                <Button text="Распарсить и добавить к списку" onAction="#addMoreAnnouncements"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-padding: 10;">
+            <VBox fx:id="gamesContainer" spacing="5"/>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <Separator/>
+            <Button text="+ Добавить пустой турнир" onAction="#addEmptyGame"/>
+            <Separator/>
+            <Button text="Сформировать и отправить голосование" onAction="#sendPoll"
+                    style="-fx-font-weight: bold;"/>
+        </VBox>
+    </bottom>
+</BorderPane>
