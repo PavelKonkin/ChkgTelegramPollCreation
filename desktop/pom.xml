@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.chgk</groupId>
         <artifactId>chgk-poll-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>desktop</artifactId>
@@ -41,32 +41,29 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.panteleyev</groupId>
+            <artifactId>jpackage-maven-plugin</artifactId>
+            <version>1.5.1</version>
+        </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
+            <!-- Компилятор -->
             <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.8</version>
-
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
                 <configuration>
-                    <mainClass>org.chgk.ChgkFxApplication</mainClass>
-                    <compress>2</compress>
-                    <stripDebug>true</stripDebug>
-                    <noHeaderFiles>true</noHeaderFiles>
-                    <noManPages>true</noManPages>
-                    <launcher>ChgkPolls</launcher>
-                    <jlinkImageName>chgk-polls</jlinkImageName>
-                    <commandlineArgs>
-                        "--add-modules spring.context,spring.boot,spring.web,com.fasterxml.jackson.databind,spring.boot.autoconfigure"
-                    </commandlineArgs>
+                    <release>${maven.compiler.release}</release>
                 </configuration>
-
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+<!--                <version>3.3.3</version> &lt;!&ndash; например &ndash;&gt;-->
                 <executions>
                     <execution>
                         <goals>
@@ -74,26 +71,45 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <!-- Указываем твой launcher -->
+                    <mainClass>org.chgk.Launcher</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- JavaFX -->
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>org.chgk.Launcher</mainClass>
+                    <!-- Работаем в classpath-режиме -->
+                    <runtimePathOption>CLASSPATH</runtimePathOption>
+
+                    <!-- Настройки jlink -->
+                    <stripDebug>true</stripDebug>
+                    <compress>2</compress>
+                    <noHeaderFiles>true</noHeaderFiles>
+                    <noManPages>true</noManPages>
+                    <launcher>chgk-desktop</launcher>
+                    <jlinkImageName>chgk-image</jlinkImageName>
+                    <jlinkZipName>chgk-image-zip</jlinkZipName>
+                </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Указываем, куда копировать зависимости -->
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.5.1</version>
+                <configuration>
+                    <input>${project.build.directory}</input>
+                    <mainJar>${project.build.finalName}.jar</mainJar>
+                    <mainClass>org.springframework.boot.loader.launch.JarLauncher</mainClass>
+                    <name>chgk-desktop</name>
+                    <type>PKG</type>
+                    <destination>${project.basedir}/jpackage-output</destination>
+
+                </configuration>
             </plugin>
         </plugins>
     </build>
