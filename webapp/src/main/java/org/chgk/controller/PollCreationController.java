@@ -7,11 +7,11 @@ import org.chgk.service.TelegramService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import java.util.List;
 
 @Controller
-@SessionAttributes("gameWrapper")
 public class PollCreationController {
     private final AnnouncementParser parser;
     private final TelegramService telegramService;

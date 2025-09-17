@@ -11,6 +11,7 @@ import org.chgk.service.TelegramService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.prefs.Preferences;
 
 @Component // Делаем контроллер Spring-бином для инъекции сервисов
 public class FxController {
@@ -24,9 +25,27 @@ public class FxController {
     @FXML private TextArea moreParseTextArea;
     @FXML private VBox gamesContainer;
 
+    @FXML private TextField botTokenField;
+    @FXML private TextField chatIdField;
+
+    private final Preferences prefs = Preferences.userNodeForPackage(FxController.class);
+
     public FxController(AnnouncementParser parser, TelegramService telegramService) {
         this.parser = parser;
         this.telegramService = telegramService;
+    }
+
+    @FXML
+    public void initialize() {
+        // Загружаем сохранённые значения
+        botTokenField.setText(prefs.get("botToken", ""));
+        chatIdField.setText(prefs.get("chatId", ""));
+
+        // Когда пользователь изменил поле — сразу сохраняем
+        botTokenField.textProperty().addListener((obs, oldVal, newVal) ->
+                prefs.put("botToken", newVal));
+        chatIdField.textProperty().addListener((obs, oldVal, newVal) ->
+                prefs.put("chatId", newVal));
     }
 
     // Метод для кнопки "Распарсить и отобразить"
@@ -62,6 +81,17 @@ public class FxController {
                 .toList();
 
         if (!selectedGames.isEmpty()) {
+            String botToken = botTokenField.getText();
+            String chatId = chatIdField.getText();
+
+            if (botToken == null || botToken.isBlank() ||
+                    chatId == null || chatId.isBlank()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Введите Bot Token и Chat ID перед отправкой.");
+                alert.setHeaderText("Нет настроек Telegram");
+                alert.showAndWait();
+                return;
+            }
+
             telegramService.sendPoll("Следующие игры", selectedGames);
             // Показываем сообщение об успехе
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Голосование отправлено! ✅");
