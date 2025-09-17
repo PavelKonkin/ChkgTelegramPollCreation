@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.prefs.Preferences;
 
+
 @Component // Делаем контроллер Spring-бином для инъекции сервисов
 public class FxController {
 
@@ -25,6 +26,7 @@ public class FxController {
     @FXML private TextArea moreParseTextArea;
     @FXML private VBox gamesContainer;
 
+
     @FXML private TextField botTokenField;
     @FXML private TextField chatIdField;
 
@@ -34,6 +36,7 @@ public class FxController {
         this.parser = parser;
         this.telegramService = telegramService;
     }
+
 
     @FXML
     public void initialize() {
@@ -81,6 +84,7 @@ public class FxController {
                 .toList();
 
         if (!selectedGames.isEmpty()) {
+
             String botToken = botTokenField.getText();
             String chatId = chatIdField.getText();
 
@@ -91,7 +95,6 @@ public class FxController {
                 alert.showAndWait();
                 return;
             }
-
             telegramService.sendPoll("Следующие игры", selectedGames);
             // Показываем сообщение об успехе
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Голосование отправлено! ✅");

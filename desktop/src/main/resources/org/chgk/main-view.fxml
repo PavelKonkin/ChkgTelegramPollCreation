@@ -32,6 +32,7 @@
                 <TextField fx:id="chatIdField" promptText="Chat ID" prefWidth="200"/>
             </HBox>
             <Separator/>
+
             <Button text="+ Добавить пустой турнир" onAction="#addEmptyGame"/>
             <Separator/>
             <Button text="Сформировать и отправить голосование" onAction="#sendPoll"
