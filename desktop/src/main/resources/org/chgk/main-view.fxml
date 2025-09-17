@@ -26,6 +26,13 @@
     <bottom>
         <VBox spacing="10" style="-fx-padding: 10;">
             <Separator/>
+            <Label text="Настройки Telegram"/>
+            <HBox spacing="10">
+                <TextField fx:id="botTokenField" promptText="Bot Token" prefWidth="300"/>
+                <TextField fx:id="chatIdField" promptText="Chat ID" prefWidth="200"/>
+            </HBox>
+            <Separator/>
+
             <Button text="+ Добавить пустой турнир" onAction="#addEmptyGame"/>
             <Separator/>
             <Button text="Сформировать и отправить голосование" onAction="#sendPoll"

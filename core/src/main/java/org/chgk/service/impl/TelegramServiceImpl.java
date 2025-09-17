@@ -35,14 +35,6 @@ public class TelegramServiceImpl implements TelegramService {
         body.put("is_anonymous", false);
         body.put("allows_multiple_answers", true);
 
-//        restTemplate.postForObject(url, Map.of(
-//                "chat_id", botConfig.getChatId(),
-//                "question", question,
-//                "options", pollOptions,
-//                "is_anonymous", false,
-//                "allows_multiple_answers", true
-//        ), String.class);
-
         restTemplate.postForObject(url, body, String.class);
     }
 }

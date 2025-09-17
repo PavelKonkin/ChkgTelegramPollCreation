@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@SessionAttributes("gameWrapper")
 public class PollCreationController {
     private final AnnouncementParser parser;
     private final TelegramService telegramService;
