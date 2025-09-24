@@ -11,6 +11,53 @@
     </parent>
 
     <artifactId>desktop</artifactId>
+    <properties>
+        <app.name>chgk-poll-sender</app.name>
+    </properties>
+
+
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <jpackage.icon>${project.basedir}/src/main/resources/icon.ico</jpackage.icon>
+                <jpackage.installDir>C:\Program Files\${app.name}</jpackage.installDir>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Linux</name>
+                </os>
+            </activation>
+            <properties>
+                <jpackage.icon>${project.basedir}/src/main/resources/icon.png</jpackage.icon>
+                <jpackage.installDir>/opt/${app.name}</jpackage.installDir>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>macos</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <jpackage.icon>${project.basedir}/src/main/resources/icon.icns</jpackage.icon>
+                <!-- На macOS installDir игнорируется -->
+            </properties>
+        </profile>
+    </profiles>
+
 
     <dependencies>
         <dependency>
@@ -105,9 +152,18 @@
                     <input>${project.build.directory}</input>
                     <mainJar>${project.build.finalName}.jar</mainJar>
                     <mainClass>org.springframework.boot.loader.launch.JarLauncher</mainClass>
-                    <name>chgk-desktop</name>
+                    <name>${app.name}</name>
                     <type>PKG</type>
                     <destination>${project.basedir}/jpackage-output</destination>
+
+                    <icon>${jpackage.icon}</icon>
+                    <installDir>${jpackage.installDir}</installDir>
+
+                    <winShortcut>true</winShortcut>
+                    <winMenu>true</winMenu>
+                    <winMenuGroup>${app.name}</winMenuGroup>
+
+                    <linuxShortcut>true</linuxShortcut>
 
                 </configuration>
             </plugin>
